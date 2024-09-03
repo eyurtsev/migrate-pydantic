@@ -14,6 +14,9 @@ to use, but it's your responsibility to check that your code works correctly.
 
 3. Use appropriate pattern for your code base:
 
+```sh
+grit apply [src]/.grit/patterns/extra_migrate.grit
+```
 
 ```sh
 grit apply [src]/.grit/patterns/to_pydantic_2.grit
