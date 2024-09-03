@@ -1,0 +1,22 @@
+engine marzano(0.1)
+language python
+
+`@root_validator(pre=False, skip_on_failure=True)` as $decorator where {
+    $decorator <: before function_definition($body, $parameters, $return_type) where {
+        $body <: contains bubble or {
+            `values["$Q"]` => `self.$Q`,
+            `values.get("$Q")` => `(self.$Q or None)`,
+            `values.get($Q, $...)` as $V where {
+                $Q <: contains `"$QName"`,
+                $V => `self.$QName`,
+            },
+            `return $Q` => `return self`
+        }
+    },
+    $decorator => `@model_validator(mode="after")`,
+    // Silly work around a bug in grit
+    // Adding Self to pydantic and then will replace it with one from typing
+    add_import(source="pydantic", name="model_validator"),
+    $parameters => `self`,
+    $return_type => `Self`
+}

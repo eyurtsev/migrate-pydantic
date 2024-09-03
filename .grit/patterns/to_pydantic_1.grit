@@ -1,0 +1,23 @@
+engine marzano(0.1)
+language python
+
+or {
+    `model_config = ConfigDict($x)` as $CONFIG where {
+        $x <: maybe contains `arbitrary_types_allowed=True` where {
+            $y = `    arbitrary_types_allowed = True\n`
+        },
+        $x <: maybe contains `extra="$extra"` where {
+            $y += `    extra = Extra.$extra\n`
+        },
+        $x <: maybe contains `frozen=$frozen` where {
+            $y += `    frozen = $frozen\n`
+        },
+        $CONFIG => `class Config:\n    """Configuration for this pydantic object."""$y'
+    },
+    `$x.model_rebuild` => `$x.update_forward_refs`,
+    // Replace pydantic imports
+    `from pydantic import $x` as $IMPORT where {
+        $IMPORT <: ! before `# pydantic: ignore`,
+        $IMPORT => `from langchain_core.pydantic_v1 import $x`,
+    }
+}

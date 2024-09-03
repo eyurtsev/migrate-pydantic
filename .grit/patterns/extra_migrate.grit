@@ -1,0 +1,7 @@
+engine marzano(0.1)
+language python
+or {
+    `extra=Extra.allow` => `extra="allow"`,
+    `extra=Extra.forbid` => `extra="forbid"`,
+    `extra=Extra.ignore` => `extra="ignore"`
+}

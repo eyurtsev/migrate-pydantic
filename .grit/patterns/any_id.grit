@@ -1,0 +1,8 @@
+engine marzano(0.1)
+language python
+
+
+`$M($x, id=AnyStr())` as $INVOKE where {
+    add_import(source="tests.unit_tests.stubs", name=`_AnyId$M`),
+    $INVOKE => `_AnyId$M($x)`
+}

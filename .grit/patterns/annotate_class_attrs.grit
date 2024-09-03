@@ -1,0 +1,27 @@
+engine marzano(0.1)
+language python
+
+class_definition(name=$C, $body, superclasses=$S) where {    
+    $C <: ! "Config", // Does not work in this scope, but works after class_definition
+    $S <: ! contains or {"Enum", "Base"},
+    $body <: block($statements),
+    $statements <: some bubble assignment(left=$x, right=$y, type=$t) as $A where {
+        $t <: .,
+        if ($y <: string()) {
+            $A => `$x: str = $y`
+        } else if ($y <: integer()) {
+            $A => `$x: int = $y`
+        }
+        else if ($y <: float()) {
+            $A => `$x: float = $y`
+        }
+        else if ($y <: `re.compile($z)`) {
+            $A => `$x: Pattern = $y`,
+            add_import(source="typing", name="Pattern")
+        } else if ($y <: or {"True", "False"} ) {
+            $A => `$x: bool = $y`
+        } 
+
+    }
+    
+}

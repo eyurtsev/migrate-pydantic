@@ -1,0 +1,10 @@
+engine marzano(0.1)
+language python
+
+`@root_validator(pre=True)` as $decorator where {
+    $decorator <: before function_definition($body, $return_type),
+    $decorator => `@model_validator(mode="before")\n@classmethod`,
+    add_import(source="pydantic", name="model_validator"),
+    $return_type => `Any`
+}
+

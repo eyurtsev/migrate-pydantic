@@ -1,0 +1,27 @@
+engine marzano(0.1)
+language python
+
+or {
+    `from $IMPORT import $...` where {
+        $IMPORT <: contains `pydantic_v1`,
+        $IMPORT => `pydantic`
+    },
+    `$X.update_forward_refs` => `$X.model_rebuild`,
+  // This pattern still needs fixing as it fails (populate_by_name vs.
+  // allow_populate_by_name)
+  class_definition($name, $body) as $C where {
+      $name <: `Config`,
+      $body <: block($statements),
+      $t = "",
+      $statements <: some bubble($t) assignment(left=$x, right=$y) as $A where {    
+        or {
+            $x <: `allow_population_by_field_name` where {
+                $t += `populate_by_name=$y,`
+            },
+            $t += `$x=$y,`
+        }
+      },
+      $C => `model_config = ConfigDict($t)`,
+      add_import(source="pydantic", name="ConfigDict")
+  }
+}
