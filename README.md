@@ -37,4 +37,14 @@ grit apply --language python '`Self` where { add_import(source="typing_extension
 ```
 
 
+Some extra migrations can be done with bump-pydantic:
+
+https://github.com/pydantic/bump-pydantic
+
+```sh
+bump-pydantic --disable BP007 .
+```
+
+This disables the root_validator → model_validator remapping which doesn’t work correctly in many cases.
+
 
