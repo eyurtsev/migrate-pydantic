@@ -5,6 +5,7 @@ language python
     $decorator <: before function_definition($body, $parameters, $return_type) where {
         $body <: contains bubble or {
             `values["$Q"]` => `self.$Q`,
+            `values[$k]` => `getattr(self, $k)`,
             `values.get("$Q")` => `(self.$Q or None)`,
             `values.get($Q, $...)` as $V where {
                 $Q <: contains `"$QName"`,
