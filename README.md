@@ -23,6 +23,10 @@ grit apply [src]/.grit/patterns/to_pydantic_2.grit
 ```
 
 ```sh
+grit apply [src]/.grit/patterns/private_attrs.grit
+```
+
+```sh
 grit apply [src]/.grit/patterns/model_before_rewrite.grit
 ```
 

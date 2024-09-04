@@ -1,0 +1,13 @@
+engine marzano(0.1)
+language python
+
+class_definition($body, superclasses=$S) where {    
+    $body <: block($statements),
+    $statements <: some bubble assignment(left=$x, right=$y, type=$t) as $A where {
+        $x <: r"_.*",
+        $y <: `Field($z)`,
+        $y => `PrivateAttr($z)`,
+        add_import(source="pydantic", name="PrivateAttr"),
+    }    
+}
+
