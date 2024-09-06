@@ -1,0 +1,24 @@
+engine marzano(0.1)
+language python
+
+class_definition(name=$C, $body, superclasses=$S) where {    
+    // $C <: ! "Config", // Does not work in this scope, but works after class_definition
+    $S <: contains {"BaseModel"},
+    $S <: contains {"Embeddings"},
+    $body <: block($statements),
+    $statements <: some bubble assignment(left=$x, right=$y, type=$t) as $A where {
+        $x <: or {
+            "model_name",
+            "model_id",
+            "model_kwargs",
+            "model_uri",
+        }
+    },
+        
+    $statements <: some bubble assignment(left=$x, right=$y, type=$t) as $A where {
+        $x <: `model_config`,
+        $y <: `ConfigDict($z)`,
+        $z <: ! contains `protected_namespaces=()`,
+        $y => `ConfigDict($z, protected_namespaces=())`
+    }
+}
